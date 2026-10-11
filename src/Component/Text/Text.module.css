@@ -1,0 +1,23 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+:root {
+  font-family: "Inter", sans-serif;
+}
+.subHeading {
+  font-size: 1.3rem;
+}
+
+.heading {
+  font-size: 1.5;
+}
+
+.title {
+  font-size: 1.8rem;
+}
+
+.paragraph {
+  font-size: 1rem;
+  @media (min-width: 768px) {
+    font-size: 1.2rem;
+  }
+}

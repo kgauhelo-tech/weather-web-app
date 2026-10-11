@@ -1,0 +1,43 @@
+:root {
+  --bg-color: #202c3c;
+}
+
+nav {
+  align-content: center;
+  height: 66px;
+  width: 100%;
+  background-color: var(--bg-color);
+  margin: auto 0;
+
+  @media (min-width: 768px) {
+    max-width: 100px;
+    align-content: center;
+    height: 90vh;
+    background-color: var(--bg-color);
+    margin: auto 0;
+    border-radius: 24px;
+  }
+}
+
+.cont {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+
+  @media (min-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    gap: 2rem;
+  }
+}
+
+.links {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+}
