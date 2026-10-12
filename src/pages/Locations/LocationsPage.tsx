@@ -1,8 +1,42 @@
-import React from "react";
 import styles from "./Locations.module.css";
 import Text from "../../Component/Text/Text";
+import { useLocation } from "../../data/LocationServices";
+import { useRef } from "react";
+import { Handshake } from "reicon-react";
+// import InputComponent from "../../Component/Text-input/Input";
 
 const LocationsPage = () => {
+  const { firstLocation, fetchFirstLocation } = useLocation();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleSearch = async () => {
+    const query = inputRef.current?.value ?? "";
+    await fetchFirstLocation(query);
+  };
+
+  const handleClick = () => {
+    console.log(firstLocation?.coordinates);
+  };
+
+  // return for practicing the thingy
+  return (
+    <div>
+      <input
+        onChange={handleSearch}
+        ref={inputRef}
+        type="text"
+        placeholder="Enter first location..."
+      />
+      {/* <button onClick={handleSearch}>Search</button> */}
+
+      {firstLocation && (
+        <p onClick={handleClick}>
+          Found: {firstLocation.name}, {firstLocation.country}
+        </p>
+      )}
+    </div>
+  );
+  // This is the actual return value
   return (
     <div className={styles.mainCont}>
       <div className={styles.mainLocation}>

@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      openmeteo:
+        specifier: ^1.2.3
+        version: 1.2.3
       react:
         specifier: ^19.2.8
         version: 19.3.0
@@ -216,6 +219,10 @@ packages:
 
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
+
+  '@openmeteo/sdk@1.28.0':
+    resolution: {integrity: sha512-7DOkY1uOAyE8bsxaugNWWB1o6qWxEG3bTGGOJkr7UWAsandEqiGmBom50ra26wgeYB7/vNXT9G7HeXk4F7Zpog==}
+    engines: {node: '>=12.0'}
 
   '@oxc-project/types@0.153.0':
     resolution: {integrity: sha512-jSNrRIyvPVLL5E1z/tS5zLAprosGz/FuI1PWwEOz59j3E4TTTzSpqKb/RDGqJhhW0QHYISGXxq582wGx6T11Tw==}
@@ -575,6 +582,9 @@ packages:
   flat-cache@6.1.23:
     resolution: {integrity: sha512-f++BY9pTk+983xK1FLzlLpmM0i0z+jHmx3QESGkURMXujQZz1k5wzwX6hjnQ8goaD0B+sYnDK1yZ6MTyZfUaqA==}
 
+  flatbuffers@25.9.23:
+    resolution: {integrity: sha512-MI1qs7Lo4Syw0EOzUl0xjs2lsoeqFku44KpngfIduHBYvzm8h2+7K8YMQh1JtVVVrUvhLpNwqVi4DERegUJhPQ==}
+
   flatted@3.4.4:
     resolution: {integrity: sha512-5+ybhBZANEJxaH3X5evAFatUxLfEHSr7n6kYJ+1Qd0mUqr4eu9gIf6GDbWHf8RJijHrjjO8G+la14SlL2SeS1Q==}
 
@@ -759,6 +769,10 @@ packages:
   node-releases@2.0.58:
     resolution: {integrity: sha512-BdiKAgbfRlvfMq/XzO/AF9NPmaA8a+YpLAyAFTVFBj3gARrAIfWvNq7Q7NE4se3KgFu0KkrvQMxTS0XVnsGzHg==}
     engines: {node: '>=18'}
+
+  openmeteo@1.2.3:
+    resolution: {integrity: sha512-3updmgCMnCAAjAgV3RfhMdIBPi/43RtbjQ4CizHGn52RP9SpgmVCDRpun+Ex75NG3jTF3pZp+d1BPlP9DWMHiQ==}
+    engines: {node: '>=12.0'}
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -1153,6 +1167,10 @@ snapshots:
 
   '@keyv/serialize@1.1.1': {}
 
+  '@openmeteo/sdk@1.28.0':
+    dependencies:
+      flatbuffers: 25.9.23
+
   '@oxc-project/types@0.153.0': {}
 
   '@remix-run/route-pattern@0.22.1': {}
@@ -1487,6 +1505,8 @@ snapshots:
       flatted: 3.4.4
       hookified: 1.15.1
 
+  flatbuffers@25.9.23: {}
+
   flatted@3.4.4: {}
 
   fsevents@2.3.3:
@@ -1615,6 +1635,11 @@ snapshots:
   natural-compare@1.4.0: {}
 
   node-releases@2.0.58: {}
+
+  openmeteo@1.2.3:
+    dependencies:
+      '@openmeteo/sdk': 1.28.0
+      flatbuffers: 25.9.23
 
   optionator@0.9.4:
     dependencies:

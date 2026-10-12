@@ -2,3 +2,11 @@
   margin: 0;
   padding: 0;
 }
+
+.app-cont {
+  display: flex;
+  flex-direction: column;
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}

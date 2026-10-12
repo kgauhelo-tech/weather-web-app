@@ -5,18 +5,23 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import PageNotFound from "./pages/404/PageNotFound";
 import LocationsPage from "./pages/Locations/LocationsPage";
 import SettingsPage from "./pages/Settings/SettingsPage";
+import { LocationProvider } from "./data/LocationServices";
 
 function App() {
   return (
     <>
-      <Navbar />
-      <Routes>
-        <Route index path="/" element={<Dashboard />} />
-        <Route index path="/locations" element={<LocationsPage />} />
-        <Route index path="/settings" element={<SettingsPage />} />
-
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
+      {" "}
+      <LocationProvider>
+        <div className="app-cont">
+          <Navbar />
+          <Routes>
+            <Route index path="/" element={<Dashboard />} />
+            <Route index path="/locations" element={<LocationsPage />} />
+            <Route index path="/settings" element={<SettingsPage />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </div>
+      </LocationProvider>
     </>
   );
 }
