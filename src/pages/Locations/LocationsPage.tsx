@@ -4,7 +4,7 @@ import { useLocation } from "../../data/LocationServices";
 import { useRef } from "react";
 import CustomButton from "../../Component/CustomButton/CustomButton";
 import { useNavigate } from "react-router";
-// import InputComponent from "../../Component/Text-input/Input";
+import { useWeather } from "../../data/WeatherServices";
 
 const LocationsPage = () => {
   const {
@@ -15,38 +15,19 @@ const LocationsPage = () => {
     thirdLocation,
     fetchThirdLocation,
   } = useLocation();
-  const firstLocationRef = useRef<HTMLInputElement>(null);
-  const secondLocationRef = useRef<HTMLInputElement>(null);
-  const thirdLocationRef = useRef<HTMLInputElement>(null);
+
+  const {
+    fetchFirstWeather,
+    firstWeather,
+    secondWeather,
+    fetchSecondWeather,
+    thirdWeather,
+    fetchThirdWeather,
+  } = useWeather();
 
   const navigate = useNavigate();
 
-  const handleFirstSearch = async () => {
-    const query = secondLocationRef.current?.value ?? "";
-    await fetchFirstLocation(query);
-  };
-
-  const handleSecondSearch = async () => {
-    const query = secondLocationRef.current?.value ?? "";
-    await fetchSecondLocation(query);
-  };
-
-  const handleThirdSearch = async () => {
-    const query = thirdLocationRef.current?.value ?? "";
-    await fetchThirdLocation(query);
-  };
-
-  const handleFirstClick = () => {
-    console.log(firstLocation?.coordinates);
-  };
-
-  const handleSecondClick = () => {
-    console.log(secondLocation?.coordinates);
-  };
-
-  const handleThirdClick = () => {
-    console.log(thirdLocation?.coordinates);
-  };
+  const location = [firstLocation];
 
   const handleChangeClick = () => {
     navigate("/changeLocations");
@@ -78,29 +59,48 @@ const LocationsPage = () => {
               <Text variant="subHeading">
                 <span className={styles.darkened}>Temperature</span>
               </Text>
-              <Text variant="subHeading">{"temp"}</Text>
+              <Text variant="subHeading">
+                {firstWeather?.current
+                  ? `${Math.round(firstWeather.current.temperature_2m)}`
+                  : "0"}
+                °C
+              </Text>
             </div>
 
             <div>
               <Text variant="subHeading">
                 <span className={styles.darkened}>Rain</span>
               </Text>
-              <Text variant="subHeading">{"temp"}</Text>
+              <Text variant="subHeading">
+                {firstWeather?.current
+                  ? `${Math.round(firstWeather.current.rain)}`
+                  : "0"}
+                mm
+              </Text>
             </div>
 
             <div>
               <Text variant="subHeading">
-                <span className={styles.darkened}>Wind Spe</span>
-                ed
+                <span className={styles.darkened}>Wind Speed</span>
               </Text>
-              <Text variant="subHeading">{"temp"}</Text>
+              <Text variant="subHeading">
+                {firstWeather?.current
+                  ? `${Math.round(firstWeather.current.wind_speed_10m)}`
+                  : "0"}{" "}
+                km/h
+              </Text>
             </div>
 
             <div>
               <Text variant="subHeading">
                 <span className={styles.darkened}>Humidity</span>
               </Text>
-              <Text variant="subHeading">{"temp"}</Text>
+              <Text variant="subHeading">
+                {firstWeather?.current
+                  ? `${Math.round(firstWeather.current.relative_humidity_2m)}`
+                  : "0"}
+                %
+              </Text>
             </div>
           </div>
         </div>
@@ -119,7 +119,12 @@ const LocationsPage = () => {
                   <span className={styles.darkened}>Temperature</span>
                 </Text>
                 <Text variant="p">
-                  <span className={styles.bolded}>{"Temp"}</span>
+                  <span className={styles.bolded}>
+                    {secondWeather?.current
+                      ? `${Math.round(secondWeather.current.temperature_2m)}`
+                      : "0"}
+                    °C
+                  </span>
                 </Text>
               </div>
 
@@ -128,7 +133,12 @@ const LocationsPage = () => {
                   <span className={styles.darkened}>Rain</span>
                 </Text>
                 <Text variant="p">
-                  <span className={styles.bolded}>{"Temp"}</span>
+                  <span className={styles.bolded}>
+                    {secondWeather?.current
+                      ? `${Math.round(secondWeather.current.rain)}`
+                      : "0"}
+                    %
+                  </span>
                 </Text>
               </div>
 
@@ -137,7 +147,12 @@ const LocationsPage = () => {
                   <span className={styles.darkened}>Wind Speed</span>
                 </Text>
                 <Text variant="p">
-                  <span className={styles.bolded}>{"Temp"}</span>
+                  <span className={styles.bolded}>
+                    {secondWeather?.current
+                      ? `${Math.round(secondWeather.current.wind_speed_10m)}`
+                      : "0"}{" "}
+                    km/h
+                  </span>
                 </Text>
               </div>
 
@@ -146,7 +161,12 @@ const LocationsPage = () => {
                   <span className={styles.darkened}>Humidity</span>
                 </Text>
                 <Text variant="p">
-                  <span className={styles.bolded}>{"Temp"}</span>
+                  <span className={styles.bolded}>
+                    {secondWeather?.current
+                      ? `${Math.round(secondWeather.current.relative_humidity_2m)}`
+                      : "0"}
+                    %
+                  </span>
                 </Text>
               </div>
             </div>
@@ -162,7 +182,12 @@ const LocationsPage = () => {
                   <span className={styles.darkened}>Temperature</span>
                 </Text>
                 <Text variant="p">
-                  <span className={styles.bolded}>{"Temp"}</span>
+                  <span className={styles.bolded}>
+                    {thirdWeather?.current
+                      ? `${Math.round(thirdWeather.current.temperature_2m)}`
+                      : "0"}
+                    °C
+                  </span>
                 </Text>
               </div>
 
@@ -171,7 +196,12 @@ const LocationsPage = () => {
                   <span className={styles.darkened}>Rain</span>
                 </Text>
                 <Text variant="p">
-                  <span className={styles.bolded}>{"Temp"}</span>
+                  <span className={styles.bolded}>
+                    {thirdWeather?.current
+                      ? `${Math.round(thirdWeather.current.temperature_2m)}`
+                      : "0"}
+                    %
+                  </span>
                 </Text>
               </div>
 
@@ -180,7 +210,12 @@ const LocationsPage = () => {
                   <span className={styles.darkened}>Wind Speed</span>
                 </Text>
                 <Text variant="p">
-                  <span className={styles.bolded}>{"Temp"}</span>
+                  <span className={styles.bolded}>
+                    {thirdWeather?.current
+                      ? `${Math.round(thirdWeather.current.wind_speed_10m)}`
+                      : "0"}{" "}
+                    km/h
+                  </span>
                 </Text>
               </div>
 
@@ -189,7 +224,12 @@ const LocationsPage = () => {
                   <span className={styles.darkened}>Humidity</span>
                 </Text>
                 <Text variant="p">
-                  <span className={styles.bolded}>{"Temp"}</span>
+                  <span className={styles.bolded}>
+                    {thirdWeather?.current
+                      ? `${Math.round(thirdWeather.current.relative_humidity_2m)}`
+                      : "0"}
+                    %
+                  </span>
                 </Text>
               </div>
             </div>
@@ -197,71 +237,6 @@ const LocationsPage = () => {
         </div>
       </div>
     </>
-  );
-
-  return (
-    <div className={`${styles.locationsCont}`}>
-      <div className={`${styles.mainLocation}`}>
-        <Text variant="subHeading">Main Heading</Text>
-
-        <Text variant="p">
-          {firstLocation !== null ? `${firstLocation?.name}` : "Set Location"}
-        </Text>
-
-        <div className={`${styles.firstLocation}`}>
-          <input
-            onChange={handleFirstSearch}
-            ref={firstLocationRef}
-            type="text"
-            placeholder="Enter first location..."
-          />
-
-          {firstLocation && (
-            <div onClick={handleFirstClick}>
-              <Text variant="p">
-                {firstLocation?.name}, {firstLocation?.country}
-              </Text>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className={`${styles.otherLocations}`}>
-        <div className={`${styles.secondLocation}`}>
-          <input
-            onChange={handleSecondSearch}
-            ref={secondLocationRef}
-            type="text"
-            placeholder="Enter second location..."
-          />
-
-          {secondLocation && (
-            <div onClick={handleSecondClick}>
-              <Text variant="p">
-                {secondLocation?.name}, {secondLocation?.country}
-              </Text>
-            </div>
-          )}
-        </div>
-
-        <div className={`${styles.thirdLocation}`}>
-          <input
-            onChange={handleThirdSearch}
-            ref={thirdLocationRef}
-            type="text"
-            placeholder="Enter third location..."
-          />
-
-          {thirdLocation && (
-            <div onClick={handleThirdClick}>
-              <Text variant="p">
-                {thirdLocation?.name}, {thirdLocation?.country}
-              </Text>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
   );
 };
 

@@ -11,7 +11,7 @@ const WeekForecast = () => {
     const nextDate = new Date(now);
     nextDate.setDate(now.getDate() + i);
 
-    const dayName = nextDate.toLocaleDateString("en-ZA", { weekday: "long" });
+    const dayName = nextDate.toLocaleDateString("en-ZA", { weekday: "short" });
     forecastDaysList.push(dayName);
   }
 
@@ -23,13 +23,15 @@ const WeekForecast = () => {
 
       <div className={styles.forecastCont}>
         {/* // for the day */}
-        {forecastDaysList.map((day) => {
-          return <Text variant={"p"}>{day}</Text>;
-        })}
+        <div>
+          {forecastDaysList.map((day) => {
+            return <Text variant={"p"}>{day}</Text>;
+          })}
+        </div>
         {/* //for the icon */}
-        {}
+        <div>{}</div>
         {/* for the temperatures */}
-        {}
+        <div>{}</div>
       </div>
     </div>
   );

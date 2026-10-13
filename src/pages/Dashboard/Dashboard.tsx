@@ -1,82 +1,30 @@
 import WeekForecast from "../../Component/WeekForecast";
-import InputComponent from "../../Component/Text-input/Input";
 import Text from "../../Component/Text/Text";
 import styles from "./Dashboard.module.css";
-import { CloudRain, Fog, Sun, Sun2, Temperature, Wind } from "reicon-react";
-// import { useWeather } from "../../data/WeatherServices";
-// import { useLocation } from "../../data/LocationServices";
+import { CloudRain, Fog, Sun, Temperature, Wind } from "reicon-react";
+import { useWeather } from "../../data/WeatherServices";
+import { useLocation } from "../../data/LocationServices";
+import { useEffect } from "react";
 
 const Dashboard = () => {
-  // const { weatherResults, fetchWeatherForAllLocations } = useWeather();
+  const { fetchFirstWeather, firstWeather } = useWeather();
 
-  // const { firstLocation, secondLocation, thirdLocation } = useLocation();
+  const { firstLocation } = useLocation();
 
-  // const locations = [firstLocation, secondLocation, thirdLocation];
+  const location = [firstLocation];
 
-  // return (
-  //   <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
-  //     <h1>Multi-Location Weather Forecast</h1>
+  useEffect(() => {
+    if (firstLocation) {
+      fetchFirstWeather();
+    }
+  }, [firstLocation, fetchFirstWeather]);
 
-  //     {/* Trigger button to fetch weather for all 3 slots at once */}
-  //     <button
-  //       onClick={fetchWeatherForAllLocations}
-  //       style={{
-  //         padding: "10px 20px",
-  //         fontSize: "16px",
-  //         cursor: "pointer",
-  //         marginBottom: "20px",
-  //       }}
-  //     >
-  //       Fetch Weather for All Locations
-  //     </button>
-
-  //     {/* Grid or list layout to display the 3 results */}
-  //     <div style={{ display: "flex", gap: "20px" }}>
-  //       {weatherResults.map((weather, index) => {
-  //         const loc = locations[index];
-
-  //         return (
-  //           <div
-  //             key={index}
-  //             style={{
-  //               border: "1px solid #ccc",
-  //               padding: "15px",
-  //               borderRadius: "8px",
-  //               minWidth: "250px",
-  //             }}
-  //           >
-  //             <h3>
-  //               Slot {index + 1}:{" "}
-  //               {loc ? `${loc.name}, ${loc.country}` : "Not Selected"}
-  //             </h3>
-
-  //             {weather ? (
-  //               <div>
-  //                 <p>
-  //                   <strong>Current Temp:</strong>{" "}
-  //                   {weather.current.temperature_2m}°C
-  //                 </p>
-  //                 <p>
-  //                   <strong>Rain:</strong> {weather.current.rain} mm
-  //                 </p>
-  //                 <p>
-  //                   <strong>Wind Speed:</strong>{" "}
-  //                   {weather.current.wind_speed_10m} km/h
-  //                 </p>
-  //                 <p>
-  //                   <strong>Humidity:</strong>{" "}
-  //                   {weather.current.relative_humidity_2m}%
-  //                 </p>
-  //               </div>
-  //             ) : (
-  //               <p style={{ color: "#666" }}>No weather data loaded yet.</p>
-  //             )}
-  //           </div>
-  //         );
-  //       })}
-  //     </div>
-  //   </div>
-  // );
+  // const handleSearch = async () => {
+  //   const query = inputRef.current?.value ?? "";
+  //   if (query) {
+  //     await firstLocation(query);
+  //   }
+  // };
 
   return (
     <div className={styles["dash-container"]}>
@@ -92,16 +40,27 @@ const Dashboard = () => {
 
               <Text variant="heading">
                 <span className={`${styles.bolded} ${styles.allCaps}`}>
-                  {"location name"}
+                  {firstLocation
+                    ? `${firstLocation.name}, ${firstLocation.country}`
+                    : "No Location Set"}
                 </span>
               </Text>
 
               <Text variant="p">
-                Rain Possibility: <span className={styles.bolded}>{"%"}</span>
+                Rain Possibility:{" "}
+                <span className={styles.bolded}>
+                  {firstWeather?.current
+                    ? `${Math.round(firstWeather.current.rain)}%`
+                    : "0%"}
+                </span>
               </Text>
             </div>
 
-            <Text variant="title">{"Temperature value"}</Text>
+            <Text variant="title">
+              {firstWeather?.current
+                ? `${Math.round(firstWeather.current.temperature_2m)}°C`
+                : "0°C"}
+            </Text>
             <div className={styles.iconCont}></div>
           </div>
           <div className={styles.iconCont}>{<Sun size={120} />}</div>
@@ -121,7 +80,11 @@ const Dashboard = () => {
                   <span className={styles.bolded}>6 AM</span>
                 </Text>
                 <Sun />
-                <Text variant="p">time</Text>
+                <Text variant="p">
+                  {firstWeather?.hourly.temperature_2m
+                    ? `${Math.round(firstWeather.hourly.temperature_2m[6])}°C`
+                    : "0°C"}
+                </Text>
               </div>
 
               <div className={styles.time}>
@@ -129,7 +92,11 @@ const Dashboard = () => {
                   <span className={styles.bolded}>9 AM</span>
                 </Text>
                 <Sun />
-                <Text variant="p">time</Text>
+                <Text variant="p">
+                  {firstWeather?.hourly.temperature_2m
+                    ? `${Math.round(firstWeather.hourly.temperature_2m[9])}°C`
+                    : "0°C"}
+                </Text>
               </div>
 
               <div className={styles.time}>
@@ -137,7 +104,11 @@ const Dashboard = () => {
                   <span className={styles.bolded}>12 PM</span>
                 </Text>
                 <Sun />
-                <Text variant="p">time</Text>
+                <Text variant="p">
+                  {firstWeather?.hourly.temperature_2m
+                    ? `${Math.round(firstWeather.hourly.temperature_2m[12])}°C`
+                    : "0°C"}
+                </Text>
               </div>
 
               <div className={styles.time}>
@@ -145,7 +116,11 @@ const Dashboard = () => {
                   <span className={styles.bolded}>3 PM</span>
                 </Text>
                 <Sun />
-                <Text variant="p">time</Text>
+                <Text variant="p">
+                  {firstWeather?.hourly.temperature_2m
+                    ? `${Math.round(firstWeather.hourly.temperature_2m[15])}°C`
+                    : "0°C"}
+                </Text>
               </div>
 
               <div className={styles.time}>
@@ -153,7 +128,11 @@ const Dashboard = () => {
                   <span className={styles.bolded}>6 PM</span>
                 </Text>
                 <Sun />
-                <Text variant="p">time</Text>
+                <Text variant="p">
+                  {firstWeather?.hourly.temperature_2m
+                    ? `${Math.round(firstWeather.hourly.temperature_2m[18])}°C`
+                    : "0°C"}
+                </Text>
               </div>
 
               <div className={styles.time}>
@@ -161,7 +140,11 @@ const Dashboard = () => {
                   <span className={styles.bolded}>9 PM</span>
                 </Text>
                 <Sun />
-                <Text variant="p">time</Text>
+                <Text variant="p">
+                  {firstWeather?.hourly.temperature_2m
+                    ? `${Math.round(firstWeather.hourly.temperature_2m[21])}°C`
+                    : "0°C"}
+                </Text>
               </div>
             </div>
           </div>
@@ -179,7 +162,11 @@ const Dashboard = () => {
                 <Text variant="p">
                   <span className={styles.conditionLabel}>Temperature</span>
                 </Text>
-                <Text variant="p">{"temp"}</Text>
+                <Text variant="p">
+                  {firstWeather?.current
+                    ? `${Math.round(firstWeather.current.temperature_2m)}°C`
+                    : "0°C"}
+                </Text>
               </div>
 
               <div className={styles.condition}>
@@ -187,7 +174,11 @@ const Dashboard = () => {
                 <Text variant="p">
                   <span className={styles.conditionLabel}>Humidity</span>
                 </Text>
-                <Text variant="p">{"temp"}</Text>
+                <Text variant="p">
+                  {firstWeather?.current
+                    ? `${Math.round(firstWeather.current.relative_humidity_2m)}%`
+                    : "0%"}
+                </Text>
               </div>
 
               <div className={styles.condition}>
@@ -195,7 +186,11 @@ const Dashboard = () => {
                 <Text variant="p">
                   <span className={styles.conditionLabel}>Rain</span>
                 </Text>
-                <Text variant="p">{"temp"}</Text>
+                <Text variant="p">
+                  {firstWeather?.current
+                    ? `${Math.round(firstWeather.current.rain)} mm`
+                    : "0 mm"}
+                </Text>
               </div>
 
               <div className={styles.condition}>
@@ -203,7 +198,11 @@ const Dashboard = () => {
                 <Text variant="p">
                   <span className={styles.conditionLabel}>Wind Speed</span>
                 </Text>
-                <Text variant="p">{"temp"}</Text>
+                <Text variant="p">
+                  {firstWeather?.current
+                    ? `${Math.round(firstWeather.current.wind_speed_10m)} km/h`
+                    : "0 km/h"}
+                </Text>
               </div>
             </div>
           </div>
