@@ -1,12 +1,22 @@
+:root {
+  --blue: #168ce1;
+  --primary-color: #fff;
+  --content-bg: #202c3c;
+  --page-bg: #0c121e;
+}
+
 * {
   margin: 0;
   padding: 0;
 }
 
 .app-cont {
+  background-color: var(--page-bg);
   display: flex;
   flex-direction: column;
   @media (min-width: 768px) {
     flex-direction: row;
+    gap: 2rem;
+    height: 100vh;
   }
 }

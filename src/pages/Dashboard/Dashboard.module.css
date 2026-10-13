@@ -6,7 +6,6 @@
 }
 
 .dash-container {
-  background-color: var(--page-bg);
   padding: 1rem;
 
   display: flex;
@@ -16,8 +15,6 @@
 
   @media (min-width: 768px) {
     flex-direction: row;
-    max-width: 1200px;
-
     gap: 2rem;
   }
 }
@@ -33,4 +30,5 @@
 .dash-container {
   border-radius: 1rem;
   background-color: var(--content-bg);
+  color: var(--primary-color);
 }
