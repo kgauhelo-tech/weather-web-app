@@ -7,22 +7,28 @@ import LocationsPage from "./pages/Locations/LocationsPage";
 import SettingsPage from "./pages/Settings/SettingsPage";
 import { LocationProvider } from "./data/LocationServices";
 import ChangeLocationsPage from "./pages/Locations/ChangeLocations/ChangeLocations";
+import { WeatherProvider } from "./data/WeatherServices";
 
 function App() {
   return (
     <>
       {" "}
       <LocationProvider>
-        <div className="app-cont">
-          <Navbar />
-          <Routes>
-            <Route index path="/" element={<Dashboard />} />
-            <Route path="/locations" element={<LocationsPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/changeLocations" element={<ChangeLocationsPage />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </div>
+        <WeatherProvider>
+          <div className="app-cont">
+            <Navbar />
+            <Routes>
+              <Route index path="/" element={<Dashboard />} />
+              <Route path="/locations" element={<LocationsPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+              <Route
+                path="/changeLocations"
+                element={<ChangeLocationsPage />}
+              />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </div>
+        </WeatherProvider>
       </LocationProvider>
     </>
   );

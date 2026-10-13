@@ -1,8 +1,10 @@
 import { fetchWeatherApi } from "openmeteo";
+import { createContext } from "react";
+import { LocationContext, useLocation } from "./LocationServices";
 
 const params = {
-  latitude: [, NaN, NaN],
-  longitude: [, NaN, NaN],
+  latitude: [0, 0, 0],
+  longitude: [0, 0, 0],
   hourly: ["temperature_2m", "relative_humidity_2m", "rain", "wind_speed_80m"],
   current: ["temperature_2m", "rain", "wind_speed_10m", "relative_humidity_2m"],
   timezone: "auto",
@@ -69,3 +71,41 @@ for (const response of responses) {
   );
   console.log("\nHourly data:\n", weatherData.hourly);
 }
+
+type Weather = {};
+
+interface WeatherContextType {
+  fetchFirstLocationWeather: () => void;
+  fetchSecondLocationWeather: () => void;
+  fetchThirdLocationWeather: () => void;
+  setFirstLocationWeather: () => void;
+  setSecondLocation: () => void;
+  setThirdLocation: () => void;
+}
+
+const WeatherContext = createContext<WeatherContextType | null>(null);
+
+interface WeatherProviderProps {
+  children: React.ReactNode;
+}
+
+export const WeatherProvider: React.FC<WeatherProviderProps> = ({
+  children,
+}) => {
+  const { firstLocation, secondLocation, thirdLocation } = useLocation();
+
+  const firstLocationCoordinates = {
+    lat: firstLocation?.coordinates[1],
+    long: firstLocation?.coordinates[0],
+  };
+
+  const secondLocationCoordinates = {
+    lat: secondLocation?.coordinates[1],
+    long: secondLocation?.coordinates[0],
+  };
+
+  const thirdLocationCoordinates = {
+    lat: thirdLocation?.coordinates[1],
+    long: thirdLocation?.coordinates[0],
+  };
+};
