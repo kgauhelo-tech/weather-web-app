@@ -1,33 +1,16 @@
 import styles from "./Locations.module.css";
 import Text from "../../Component/Text/Text";
 import { useLocation } from "../../data/LocationServices";
-import { useRef } from "react";
 import CustomButton from "../../Component/CustomButton/CustomButton";
 import { useNavigate } from "react-router";
 import { useWeather } from "../../data/WeatherServices";
 
 const LocationsPage = () => {
-  const {
-    firstLocation,
-    fetchFirstLocation,
-    secondLocation,
-    fetchSecondLocation,
-    thirdLocation,
-    fetchThirdLocation,
-  } = useLocation();
+  const { firstLocation, secondLocation, thirdLocation } = useLocation();
 
-  const {
-    fetchFirstWeather,
-    firstWeather,
-    secondWeather,
-    fetchSecondWeather,
-    thirdWeather,
-    fetchThirdWeather,
-  } = useWeather();
+  const { firstWeather, secondWeather, thirdWeather } = useWeather();
 
   const navigate = useNavigate();
-
-  const location = [firstLocation];
 
   const handleChangeClick = () => {
     navigate("/changeLocations");

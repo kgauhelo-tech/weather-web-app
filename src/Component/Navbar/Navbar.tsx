@@ -1,14 +1,6 @@
 import { NavLink } from "react-router";
 import styles from "./Navbar.module.css";
-import {
-  Clouds,
-  Menu4,
-  Pin2,
-  Setting2,
-  Subtitles,
-  X,
-  type IconComponent,
-} from "reicon-react";
+import { Clouds, Menu4, Pin2, Setting2, X } from "reicon-react";
 import Text from "../Text/Text";
 import { useRef, useState } from "react";
 

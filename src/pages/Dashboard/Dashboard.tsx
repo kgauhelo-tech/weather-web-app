@@ -1,17 +1,16 @@
+import { useEffect, useRef } from "react";
 import WeekForecast from "../../Component/WeekForecast";
 import Text from "../../Component/Text/Text";
 import styles from "./Dashboard.module.css";
 import { CloudRain, Fog, Sun, Temperature, Wind } from "reicon-react";
 import { useWeather } from "../../data/WeatherServices";
 import { useLocation } from "../../data/LocationServices";
-import { useEffect } from "react";
 
 const Dashboard = () => {
   const { fetchFirstWeather, firstWeather } = useWeather();
+  const { firstLocation, fetchFirstLocation } = useLocation();
 
-  const { firstLocation } = useLocation();
-
-  const location = [firstLocation];
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (firstLocation) {
@@ -19,52 +18,76 @@ const Dashboard = () => {
     }
   }, [firstLocation, fetchFirstWeather]);
 
-  // const handleSearch = async () => {
-  //   const query = inputRef.current?.value ?? "";
-  //   if (query) {
-  //     await firstLocation(query);
-  //   }
-  // };
+  const handleSearchKeyDown = async (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (e.key === "Enter") {
+      const query = inputRef.current?.value ?? "";
+      if (query) {
+        await fetchFirstLocation(query);
+      }
+    }
+  };
 
   return (
     <div className={styles["dash-container"]}>
       <div className={styles.middleColumn}>
-        <input id="search" type="text" placeholder="Search a location" />
+        <input
+          ref={inputRef}
+          id="search"
+          type="text"
+          placeholder="Search a location (Press Enter)"
+          onKeyDown={handleSearchKeyDown}
+        />
 
-        <div className={styles.focused}>
-          <div className={styles.textCont}>
-            <div className={styles.titleCont}>
-              <Text variant="p">
-                <span className={styles.blue}>Today</span>
-              </Text>
-
-              <Text variant="heading">
-                <span className={`${styles.bolded} ${styles.allCaps}`}>
-                  {firstLocation
-                    ? `${firstLocation.name}, ${firstLocation.country}`
-                    : "No Location Set"}
-                </span>
-              </Text>
-
-              <Text variant="p">
-                Rain Possibility:{" "}
-                <span className={styles.bolded}>
-                  {firstWeather?.current
-                    ? `${Math.round(firstWeather.current.rain)}%`
-                    : "0%"}
-                </span>
-              </Text>
+        {!firstLocation ? (
+          <div className={`${styles.focused} ${styles.emptyState}`}>
+            <div className={styles.textCont}>
+              <div className={styles.titleCont}>
+                <Text variant="heading">
+                  <span className={styles.bolded}>No Main Location Set</span>
+                </Text>
+                <Text variant="p">
+                  Search for a city using the input above to view your local
+                  forecast.
+                </Text>
+              </div>
             </div>
-
-            <Text variant="title">
-              {firstWeather?.current
-                ? `${Math.round(firstWeather.current.temperature_2m)}°C`
-                : "0°C"}
-            </Text>
-            <div className={styles.iconCont}></div>
           </div>
-          <div className={styles.iconCont}>{<Sun size={120} />}</div>
-        </div>
+        ) : (
+          <div className={styles.focused}>
+            <div className={styles.textCont}>
+              <div className={styles.titleCont}>
+                <Text variant="p">
+                  <span className={styles.blue}>Today</span>
+                </Text>
+
+                <Text variant="heading">
+                  <span className={`${styles.bolded} ${styles.allCaps}`}>
+                    {`${firstLocation.name}, ${firstLocation.country}`}
+                  </span>
+                </Text>
+
+                <Text variant="p">
+                  Rain Possibility:{" "}
+                  <span className={styles.bolded}>
+                    {firstWeather?.current
+                      ? `${Math.round(firstWeather.current.rain)} mm`
+                      : "0 mm"}
+                  </span>
+                </Text>
+              </div>
+
+              <Text variant="title">
+                {firstWeather?.current
+                  ? `${Math.round(firstWeather.current.temperature_2m)}°C`
+                  : "--°C"}
+              </Text>
+              <div className={styles.iconCont}></div>
+            </div>
+            <div className={styles.iconCont}>{<Sun size={120} />}</div>
+          </div>
+        )}
 
         <div className={styles.boxed}>
           <div className={styles.forecast}>
@@ -83,7 +106,7 @@ const Dashboard = () => {
                 <Text variant="p">
                   {firstWeather?.hourly.temperature_2m
                     ? `${Math.round(firstWeather.hourly.temperature_2m[6])}°C`
-                    : "0°C"}
+                    : "--"}
                 </Text>
               </div>
 
@@ -95,7 +118,7 @@ const Dashboard = () => {
                 <Text variant="p">
                   {firstWeather?.hourly.temperature_2m
                     ? `${Math.round(firstWeather.hourly.temperature_2m[9])}°C`
-                    : "0°C"}
+                    : "--"}
                 </Text>
               </div>
 
@@ -107,7 +130,7 @@ const Dashboard = () => {
                 <Text variant="p">
                   {firstWeather?.hourly.temperature_2m
                     ? `${Math.round(firstWeather.hourly.temperature_2m[12])}°C`
-                    : "0°C"}
+                    : "--"}
                 </Text>
               </div>
 
@@ -119,7 +142,7 @@ const Dashboard = () => {
                 <Text variant="p">
                   {firstWeather?.hourly.temperature_2m
                     ? `${Math.round(firstWeather.hourly.temperature_2m[15])}°C`
-                    : "0°C"}
+                    : "--"}
                 </Text>
               </div>
 
@@ -131,7 +154,7 @@ const Dashboard = () => {
                 <Text variant="p">
                   {firstWeather?.hourly.temperature_2m
                     ? `${Math.round(firstWeather.hourly.temperature_2m[18])}°C`
-                    : "0°C"}
+                    : "--"}
                 </Text>
               </div>
 
@@ -143,7 +166,7 @@ const Dashboard = () => {
                 <Text variant="p">
                   {firstWeather?.hourly.temperature_2m
                     ? `${Math.round(firstWeather.hourly.temperature_2m[21])}°C`
-                    : "0°C"}
+                    : "--"}
                 </Text>
               </div>
             </div>
@@ -165,7 +188,7 @@ const Dashboard = () => {
                 <Text variant="p">
                   {firstWeather?.current
                     ? `${Math.round(firstWeather.current.temperature_2m)}°C`
-                    : "0°C"}
+                    : "--"}
                 </Text>
               </div>
 
@@ -177,7 +200,7 @@ const Dashboard = () => {
                 <Text variant="p">
                   {firstWeather?.current
                     ? `${Math.round(firstWeather.current.relative_humidity_2m)}%`
-                    : "0%"}
+                    : "--"}
                 </Text>
               </div>
 
@@ -189,7 +212,7 @@ const Dashboard = () => {
                 <Text variant="p">
                   {firstWeather?.current
                     ? `${Math.round(firstWeather.current.rain)} mm`
-                    : "0 mm"}
+                    : "--"}
                 </Text>
               </div>
 
@@ -201,7 +224,7 @@ const Dashboard = () => {
                 <Text variant="p">
                   {firstWeather?.current
                     ? `${Math.round(firstWeather.current.wind_speed_10m)} km/h`
-                    : "0 km/h"}
+                    : "--"}
                 </Text>
               </div>
             </div>

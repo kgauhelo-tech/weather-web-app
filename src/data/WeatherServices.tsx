@@ -75,7 +75,6 @@ const setCachedWeather = (locationName: string, data: WeatherData) => {
     JSON.stringify(cacheItem),
   );
 };
-// ------------------------------------
 
 export function WeatherProvider({ children }: { children: ReactNode }) {
   // Pull in your locations from your Location Context

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "../../data/LocationServices";
 import Text from "../../Component/Text/Text";
-import styles from "./Onboarding.module.css"; // Optional styling
+import styles from "./Onboarding.module.css";
 
 export function LocationOnboarding({
   children,
@@ -12,9 +12,7 @@ export function LocationOnboarding({
   const [query, setQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
 
-  // Check on mount if first location is stored/set
   useEffect(() => {
-    // If firstLocation is null, trigger onboarding
     if (!firstLocation) {
       setShowModal(true);
     } else {
@@ -25,7 +23,6 @@ export function LocationOnboarding({
   const handleSaveMainLocation = async () => {
     if (!query) return;
     await fetchFirstLocation(query);
-    // Once fetched and saved to context/storage, close modal
     setShowModal(false);
   };
 
@@ -54,6 +51,5 @@ export function LocationOnboarding({
     );
   }
 
-  // If main location exists, render the rest of the app normally!
   return <>{children}</>;
 }

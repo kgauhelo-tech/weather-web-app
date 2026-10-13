@@ -1,13 +1,12 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
+import { getCachedLocation, setCachedLocation } from "./LocationCache"; // 👈 Import the cache helper
 
-// 1. Define the shape of a single location result
 type LocationData = {
   name: string;
   country: string;
   coordinates: number[];
 };
 
-// 2. Define the exact contract (Context Type) with separate handlers
 type LocationContextType = {
   firstLocation: LocationData | null;
   secondLocation: LocationData | null;
@@ -22,11 +21,16 @@ export const LocationContext = createContext<LocationContextType | undefined>(
 );
 
 export function LocationProvider({ children }: { children: ReactNode }) {
-  const [firstLocation, setFirstLocation] = useState<LocationData | null>(null);
-  const [secondLocation, setSecondLocation] = useState<LocationData | null>(
-    null,
+  // Initialize state directly from our clean cache utility
+  const [firstLocation, setFirstLocation] = useState<LocationData | null>(() =>
+    getCachedLocation("first"),
   );
-  const [thirdLocation, setThirdLocation] = useState<LocationData | null>(null);
+  const [secondLocation, setSecondLocation] = useState<LocationData | null>(
+    () => getCachedLocation("second"),
+  );
+  const [thirdLocation, setThirdLocation] = useState<LocationData | null>(() =>
+    getCachedLocation("third"),
+  );
 
   const fetchFirstLocation = async (query: string) => {
     if (!query) return;
@@ -38,11 +42,13 @@ export function LocationProvider({ children }: { children: ReactNode }) {
 
       if (data.features && data.features.length > 0) {
         const feature = data.features[0];
-        setFirstLocation({
+        const locationData: LocationData = {
           name: feature.properties.name,
           country: feature.properties.country,
           coordinates: feature.geometry.coordinates,
-        });
+        };
+        setFirstLocation(locationData);
+        setCachedLocation("first", locationData); // 👈 Save to cache
       }
     } catch (error) {
       console.log("Error fetching first location:", error);
@@ -59,11 +65,13 @@ export function LocationProvider({ children }: { children: ReactNode }) {
 
       if (data.features && data.features.length > 0) {
         const feature = data.features[0];
-        setSecondLocation({
+        const locationData: LocationData = {
           name: feature.properties.name,
           country: feature.properties.country,
           coordinates: feature.geometry.coordinates,
-        });
+        };
+        setSecondLocation(locationData);
+        setCachedLocation("second", locationData);
       }
     } catch (error) {
       console.log("Error fetching second location:", error);
@@ -80,11 +88,13 @@ export function LocationProvider({ children }: { children: ReactNode }) {
 
       if (data.features && data.features.length > 0) {
         const feature = data.features[0];
-        setThirdLocation({
+        const locationData: LocationData = {
           name: feature.properties.name,
           country: feature.properties.country,
           coordinates: feature.geometry.coordinates,
-        });
+        };
+        setThirdLocation(locationData);
+        setCachedLocation("third", locationData);
       }
     } catch (error) {
       console.log("Error fetching third location:", error);

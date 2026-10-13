@@ -18,7 +18,7 @@ function App() {
           <div className="app-cont">
             <Navbar />
             <Routes>
-              <Route index path="/" element={<Dashboard />} />
+              <Route index element={<Dashboard />} />
               <Route path="/locations" element={<LocationsPage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route
