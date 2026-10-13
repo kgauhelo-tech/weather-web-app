@@ -2,7 +2,7 @@ import { createContext, useContext, useState, type ReactNode } from "react";
 import { fetchWeatherApi } from "openmeteo";
 import { useLocation } from "./LocationServices";
 
-// 1. Define the full weather data structure (Current + Hourly Forecast)
+// 1. Define the full weather data structure (Current + Hourly + 7-Day Forecast)
 export type WeatherData = {
   current: {
     time: Date;
@@ -18,9 +18,13 @@ export type WeatherData = {
     rain: Float32Array | null;
     wind_speed_80m: Float32Array | null;
   };
+  daily: {
+    time: Date[];
+    temperature_2m_max: Float32Array | null;
+    temperature_2m_min: Float32Array | null;
+  };
 };
 
-// 2. Define the Context contract for all 3 slots
 type WeatherContextType = {
   firstWeather: WeatherData | null;
   secondWeather: WeatherData | null;
@@ -41,10 +45,23 @@ type CachedItem = {
   data: WeatherData;
 };
 
+// Restore Float32Array values after JSON serialization in localStorage.
+const restoreFloat32Array = (
+  value: Float32Array | number[] | Record<string, number> | null,
+): Float32Array | null => {
+  if (value === null || value === undefined) return null;
+
+  if (value instanceof Float32Array) return value;
+
+  if (Array.isArray(value)) return new Float32Array(value);
+
+  return new Float32Array(Object.values(value));
+};
+
 const getCachedWeather = (locationName: string): WeatherData | null => {
-  const cached = localStorage.getItem(
-    CACHE_PREFIX + locationName.toLowerCase(),
-  );
+  const cacheKey = CACHE_PREFIX + locationName.toLowerCase();
+  const cached = localStorage.getItem(cacheKey);
+
   if (!cached) return null;
 
   try {
@@ -52,13 +69,32 @@ const getCachedWeather = (locationName: string): WeatherData | null => {
     const isExpired = Date.now() - parsed.timestamp > ONE_HOUR;
 
     if (isExpired) {
-      localStorage.removeItem(CACHE_PREFIX + locationName.toLowerCase());
+      localStorage.removeItem(cacheKey);
       return null;
     }
 
-    // Restore date objects from stored strings
     parsed.data.current.time = new Date(parsed.data.current.time);
+
     parsed.data.hourly.time = parsed.data.hourly.time.map((t) => new Date(t));
+    parsed.data.hourly.temperature_2m = restoreFloat32Array(
+      parsed.data.hourly.temperature_2m,
+    );
+    parsed.data.hourly.relative_humidity_2m = restoreFloat32Array(
+      parsed.data.hourly.relative_humidity_2m,
+    );
+    parsed.data.hourly.rain = restoreFloat32Array(parsed.data.hourly.rain);
+    parsed.data.hourly.wind_speed_80m = restoreFloat32Array(
+      parsed.data.hourly.wind_speed_80m,
+    );
+
+    parsed.data.daily.time = parsed.data.daily.time.map((t) => new Date(t));
+    parsed.data.daily.temperature_2m_max = restoreFloat32Array(
+      parsed.data.daily.temperature_2m_max,
+    );
+    parsed.data.daily.temperature_2m_min = restoreFloat32Array(
+      parsed.data.daily.temperature_2m_min,
+    );
+
     return parsed.data;
   } catch {
     return null;
@@ -70,6 +106,7 @@ const setCachedWeather = (locationName: string, data: WeatherData) => {
     timestamp: Date.now(),
     data,
   };
+
   localStorage.setItem(
     CACHE_PREFIX + locationName.toLowerCase(),
     JSON.stringify(cacheItem),
@@ -111,7 +148,9 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
         "rain",
         "wind_speed_80m",
       ],
+      daily: ["temperature_2m_max", "temperature_2m_min"],
       timezone: "auto",
+      forecast_days: 7,
     };
 
     try {
@@ -120,6 +159,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
       const utcOffsetSeconds = response.utcOffsetSeconds();
       const current = response.current()!;
       const hourly = response.hourly()!;
+      const daily = response.daily()!;
 
       const weatherData: WeatherData = {
         current: {
@@ -149,6 +189,24 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
           rain: hourly.variables(2)!.valuesArray(),
           wind_speed_80m: hourly.variables(3)!.valuesArray(),
         },
+        daily: {
+          time: Array.from(
+            {
+              length:
+                (Number(daily.timeEnd()) - Number(daily.time())) /
+                daily.interval(),
+            },
+            (_, i) =>
+              new Date(
+                (Number(daily.time()) +
+                  i * daily.interval() +
+                  utcOffsetSeconds) *
+                  1000,
+              ),
+          ),
+          temperature_2m_max: daily.variables(0)!.valuesArray(),
+          temperature_2m_min: daily.variables(1)!.valuesArray(),
+        },
       };
 
       setCachedWeather(firstLocation.name, weatherData);
@@ -161,7 +219,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
   const fetchSecondWeather = async () => {
     if (!secondLocation) return;
 
-    // 1. Check cache first
+    // Check cache first
     const cached = getCachedWeather(secondLocation.name);
     if (cached) {
       setSecondWeather(cached);
@@ -183,7 +241,9 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
         "rain",
         "wind_speed_80m",
       ],
+      daily: ["temperature_2m_max", "temperature_2m_min"],
       timezone: "auto",
+      forecast_days: 7,
     };
 
     try {
@@ -192,6 +252,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
       const utcOffsetSeconds = response.utcOffsetSeconds();
       const current = response.current()!;
       const hourly = response.hourly()!;
+      const daily = response.daily()!;
 
       const weatherData: WeatherData = {
         current: {
@@ -221,6 +282,24 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
           rain: hourly.variables(2)!.valuesArray(),
           wind_speed_80m: hourly.variables(3)!.valuesArray(),
         },
+        daily: {
+          time: Array.from(
+            {
+              length:
+                (Number(daily.timeEnd()) - Number(daily.time())) /
+                daily.interval(),
+            },
+            (_, i) =>
+              new Date(
+                (Number(daily.time()) +
+                  i * daily.interval() +
+                  utcOffsetSeconds) *
+                  1000,
+              ),
+          ),
+          temperature_2m_max: daily.variables(0)!.valuesArray(),
+          temperature_2m_min: daily.variables(1)!.valuesArray(),
+        },
       };
 
       setCachedWeather(secondLocation.name, weatherData);
@@ -233,7 +312,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
   const fetchThirdWeather = async () => {
     if (!thirdLocation) return;
 
-    // 1. Check cache first
+    // Check cache first
     const cached = getCachedWeather(thirdLocation.name);
     if (cached) {
       setThirdWeather(cached);
@@ -255,7 +334,9 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
         "rain",
         "wind_speed_80m",
       ],
+      daily: ["temperature_2m_max", "temperature_2m_min"],
       timezone: "auto",
+      forecast_days: 7,
     };
 
     try {
@@ -264,6 +345,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
       const utcOffsetSeconds = response.utcOffsetSeconds();
       const current = response.current()!;
       const hourly = response.hourly()!;
+      const daily = response.daily()!;
 
       const weatherData: WeatherData = {
         current: {
@@ -292,6 +374,24 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
           relative_humidity_2m: hourly.variables(1)!.valuesArray(),
           rain: hourly.variables(2)!.valuesArray(),
           wind_speed_80m: hourly.variables(3)!.valuesArray(),
+        },
+        daily: {
+          time: Array.from(
+            {
+              length:
+                (Number(daily.timeEnd()) - Number(daily.time())) /
+                daily.interval(),
+            },
+            (_, i) =>
+              new Date(
+                (Number(daily.time()) +
+                  i * daily.interval() +
+                  utcOffsetSeconds) *
+                  1000,
+              ),
+          ),
+          temperature_2m_max: daily.variables(0)!.valuesArray(),
+          temperature_2m_min: daily.variables(1)!.valuesArray(),
         },
       };
 
@@ -320,8 +420,10 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
 
 export const useWeather = () => {
   const context = useContext(WeatherContext);
+
   if (!context) {
     throw new Error("useWeather must be used within a WeatherProvider");
   }
+
   return context;
 };

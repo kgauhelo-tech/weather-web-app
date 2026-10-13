@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./SettingsPage.module.css";
 import Text from "../../Component/Text/Text";
 import { RecordCircle3 } from "reicon-react";
 
 const SettingsPage = () => {
   const [themeMode, setThemeMode] = useState("light");
-  let isDarkMode = false;
 
-  isDarkMode ? setThemeMode("dark") : setThemeMode("light");
+  const toggleTheme = () => {
+    setThemeMode((current) => (current === "light" ? "dark" : "light"));
+  };
 
   return (
-    <div className={styles.SettingsPage}>
+    <div className={styles.settingsPage}>
       <div className={styles.permissions_cont}>
         <div className={styles.notifications}>
           <Text variant="p">Allow Notifications</Text>
@@ -19,6 +20,7 @@ const SettingsPage = () => {
             <RecordCircle3 />
           </div>
         </div>
+
         <div className={styles.location}>
           <Text variant="p">Allow Location Access</Text>
 
@@ -30,7 +32,7 @@ const SettingsPage = () => {
 
       <div className={styles.units_cont}>
         <div className={styles.temperature}>
-          <Text variant="p">Allow Notifications</Text>
+          <Text variant="p">Temperature Units</Text>
 
           <select name="temperature" id="temperature">
             <option value="celsius">Celsius</option>
@@ -39,7 +41,7 @@ const SettingsPage = () => {
         </div>
 
         <div className={styles.speed}>
-          <Text variant="p">Allow Location Access</Text>
+          <Text variant="p">Wind Speed Units</Text>
 
           <select name="speed" id="speed">
             <option value="km/h">km/h</option>
@@ -50,11 +52,19 @@ const SettingsPage = () => {
 
       <div className={styles.theme_cont}>
         <Text variant="heading">Theme</Text>
+
         <div className={styles.toggleCont}>
           <Text variant="p">Activate {themeMode} mode</Text>
-          <div className={styles.switch}>
+
+          <button
+            type="button"
+            className={styles.switch}
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            aria-pressed={themeMode === "dark"}
+          >
             <RecordCircle3 />
-          </div>
+          </button>
         </div>
       </div>
     </div>

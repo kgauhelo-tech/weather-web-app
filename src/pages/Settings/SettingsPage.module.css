@@ -1,0 +1,39 @@
+:root {
+  --primary-color: #fff;
+  --content-bg: #202c3c;
+  --page-bg: #0c121e;
+}
+
+.settingPage {
+  background-color: var(--page-bg);
+
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: calc(100vh - 4rem);
+  width: calc(100vw - 8rem);
+}
+
+.permissions_cont {
+  background-color: var(--content-bg);
+  border-radius: 1rem;
+  padding: 1rem;
+  width: 100%;
+  color: var(--primary-color);
+}
+
+.units_cont {
+  background-color: var(--content-bg);
+  padding: 1rem;
+  border-radius: 1rem;
+  width: 100%;
+  color: var(--primary-color);
+}
+
+.theme_cont {
+  background-color: var(--content-bg);
+  padding: 1rem;
+  border-radius: 1rem;
+  width: 100%;
+  color: var(--primary-color);
+}

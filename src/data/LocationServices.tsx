@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
-import { getCachedLocation, setCachedLocation } from "./LocationCache"; // 👈 Import the cache helper
+import { getCachedLocation, setCachedLocation } from "./LocationCache";
 
 type LocationData = {
   name: string;
@@ -48,7 +48,7 @@ export function LocationProvider({ children }: { children: ReactNode }) {
           coordinates: feature.geometry.coordinates,
         };
         setFirstLocation(locationData);
-        setCachedLocation("first", locationData); // 👈 Save to cache
+        setCachedLocation("first", locationData);
       }
     } catch (error) {
       console.log("Error fetching first location:", error);
