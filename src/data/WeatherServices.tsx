@@ -1,8 +1,17 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+  type ReactNode,
+} from "react";
 import { fetchWeatherApi } from "openmeteo";
 import { useLocation } from "./LocationServices";
 
-// 1. Define the full weather data structure (Current + Hourly + 7-Day Forecast)
+// API URL
+const url = "https://api.open-meteo.com/v1/forecast";
+
+// Define the full weather data structure (Current + Hourly + 7-Day Forecast)
 export type WeatherData = {
   current: {
     time: Date;
@@ -36,9 +45,9 @@ type WeatherContextType = {
 
 const WeatherContext = createContext<WeatherContextType | undefined>(undefined);
 
-// --- LocalStorage Caching Helpers ---
+// LocalStorage caching helpers
 const CACHE_PREFIX = "weather_cache_";
-const ONE_HOUR = 60 * 60 * 1000; // 1 hour expiration
+const ONE_HOUR = 60 * 60 * 1000;
 
 type CachedItem = {
   timestamp: number;
@@ -114,7 +123,6 @@ const setCachedWeather = (locationName: string, data: WeatherData) => {
 };
 
 export function WeatherProvider({ children }: { children: ReactNode }) {
-  // Pull in your locations from your Location Context
   const { firstLocation, secondLocation, thirdLocation } = useLocation();
 
   // State for each independent weather slot
@@ -122,12 +130,11 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
   const [secondWeather, setSecondWeather] = useState<WeatherData | null>(null);
   const [thirdWeather, setThirdWeather] = useState<WeatherData | null>(null);
 
-  const url = "https://api.open-meteo.com/v1/forecast";
-
-  const fetchFirstWeather = async () => {
+  const fetchFirstWeather = useCallback(async () => {
     if (!firstLocation) return;
 
     const cached = getCachedWeather(firstLocation.name);
+
     if (cached) {
       setFirstWeather(cached);
       return;
@@ -214,13 +221,13 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.log("Error fetching first weather:", error);
     }
-  };
+  }, [firstLocation]);
 
-  const fetchSecondWeather = async () => {
+  const fetchSecondWeather = useCallback(async () => {
     if (!secondLocation) return;
 
-    // Check cache first
     const cached = getCachedWeather(secondLocation.name);
+
     if (cached) {
       setSecondWeather(cached);
       return;
@@ -307,13 +314,13 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.log("Error fetching second weather:", error);
     }
-  };
+  }, [secondLocation]);
 
-  const fetchThirdWeather = async () => {
+  const fetchThirdWeather = useCallback(async () => {
     if (!thirdLocation) return;
 
-    // Check cache first
     const cached = getCachedWeather(thirdLocation.name);
+
     if (cached) {
       setThirdWeather(cached);
       return;
@@ -400,7 +407,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.log("Error fetching third weather:", error);
     }
-  };
+  }, [thirdLocation]);
 
   return (
     <WeatherContext.Provider
