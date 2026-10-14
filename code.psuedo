@@ -1,0 +1,76 @@
+START PROGRAM
+    DECLARE isUserLocationStored
+    DECLARE isUserLocationPermission
+    DECLARE mainUserLocation
+    DECLARE secondaryLocation
+    DECLARE tertiaryLocation
+    DECLARE locationData
+    DECLARE speedUnits
+    DECLARE temperatureUnits
+    DECLARE currentTheme
+
+
+    IF isUserLocationStored = false:
+        INPUT isUserLocationPermission
+        IF isUserLocationPermission = true:
+            Automatically locate user
+            store mainUserLocation
+            redirect user to the dashboard
+        ELSE:
+            INPUT mainUserLocation
+            store mainUserLocation
+            redirect user to the dashboard
+        END ELSE
+        END IF
+    ELSE:
+        direct user to dashboard
+        END ELSE
+    END IF
+
+    DECLARE LocationContextProvider
+        Fetch location from API
+        SET the mainUserLocation
+        SET the secondaryLocation
+        SET the tertiaryLocation
+        Export location information
+
+    DECLARE WeatherContextProvider
+        SET locationData with data from LocationContextProvider
+        Fetch weather info from API
+        Export weather information
+
+
+    //dashboard page
+    Use LocationsContextProvider
+    Display the current weather information
+    
+    Display 7-day weather forecast
+
+    Allow user to go to the locations page
+
+    // Locations Display page
+    Display main location weather conditions
+    Display secondary location weather conditions
+    Display tertiary location weather conditions
+
+    // Locations Adding page
+    INPUT secondaryLocation
+    INPUT tertiaryLocation
+
+    // Settings page
+    INPUT theme
+    if theme = dark & onClick = true:
+        themeSwitch = light
+    END IF
+
+    INPUT speedUnits
+    if user select speedUnits :
+        speedUnits = new speedUnits
+    END IF
+    
+    INPUT temperatureUnits
+    if user select temperatureUnits :
+        temperatureUnits = new temperatureUnits
+    END IF
+    
+END PROGRAM
