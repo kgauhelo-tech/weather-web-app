@@ -58,7 +58,7 @@ const LocationsPage = () => {
 
           <div className={styles.mainConditions}>
             <div>
-              <Text variant="subHeading">
+              <Text variant="p">
                 <span className={styles.darkened}>Temperature</span>
               </Text>
               <Text variant="subHeading">
@@ -70,7 +70,7 @@ const LocationsPage = () => {
             </div>
 
             <div>
-              <Text variant="subHeading">
+              <Text variant="p">
                 <span className={styles.darkened}>Rain</span>
               </Text>
               <Text variant="subHeading">
@@ -82,7 +82,7 @@ const LocationsPage = () => {
             </div>
 
             <div>
-              <Text variant="subHeading">
+              <Text variant="p">
                 <span className={styles.darkened}>Wind Speed</span>
               </Text>
               <Text variant="subHeading">
@@ -94,7 +94,7 @@ const LocationsPage = () => {
             </div>
 
             <div>
-              <Text variant="subHeading">
+              <Text variant="p">
                 <span className={styles.darkened}>Humidity</span>
               </Text>
               <Text variant="subHeading">

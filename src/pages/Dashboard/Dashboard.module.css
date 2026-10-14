@@ -18,7 +18,7 @@
 
   @media (min-width: 768px) {
     flex-direction: row;
-    gap: 2rem;
+    gap: 1rem;
     width: calc(99vw - calc(100px + 4rem));
   }
 }
@@ -41,7 +41,7 @@ input {
 .middleColumn {
   display: flex;
   flex-direction: column;
-  gap: 1.8rem;
+  gap: 1rem;
 
   @media (min-width: 768px) {
     width: 70vw;
@@ -59,6 +59,7 @@ input {
   flex-direction: column;
   gap: 1rem;
   @media (min-width: 768px) {
+    gap: 0.5rem;
   }
 }
 

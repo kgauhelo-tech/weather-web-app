@@ -4,36 +4,111 @@
   --page-bg: #0c121e;
 }
 
-.settingPage {
+.settingsPage {
   background-color: var(--page-bg);
 
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  height: calc(100vh - 4rem);
-  width: calc(100vw - 8rem);
+  gap: 1rem;
+
+  @media (min-width: 768px) {
+    height: calc(100vh - 4rem);
+    gap: 1rem;
+    width: calc(100vw);
+  }
 }
 
 .permissions_cont {
   background-color: var(--content-bg);
   border-radius: 1rem;
   padding: 1rem;
-  width: 100%;
   color: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+
+  gap: 1rem;
+
+  @media (min-width: 768px) {
+    height: calc(100vh - 4rem);
+  }
 }
 
 .units_cont {
   background-color: var(--content-bg);
   padding: 1rem;
   border-radius: 1rem;
-  width: 100%;
   color: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .theme_cont {
   background-color: var(--content-bg);
   padding: 1rem;
   border-radius: 1rem;
-  width: 100%;
   color: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bolded {
+  font-weight: bold;
+}
+
+.speed {
+  @media (min-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+.temperature {
+  @media (min-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.perm {
+  @media (min-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.toggleCont {
+  @media (min-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.switch {
+  background-color: var(--page-bg);
+  width: 6vw;
+  padding: 0.1rem;
+  border-radius: 0.3rem;
+
+  display: flex;
+  justify-content: start;
+
+  @media (min-width: 768px) {
+    padding: 0.2rem;
+    width: 6vw;
+  }
+}
+.switched {
+  background-color: var(--page-bg);
+  width: 6vw;
+  padding: 0.1rem;
+  border-radius: 0.3rem;
+
+  display: flex;
+  justify-content: end;
+
+  @media (min-width: 768px) {
+    padding: 0.2rem;
+    width: 6vw;
+  }
 }

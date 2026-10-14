@@ -29,6 +29,7 @@
 
   @media (min-width: 768px) {
     border-radius: 24px;
+    gap: 0.5rem;
   }
 }
 

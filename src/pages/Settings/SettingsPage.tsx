@@ -13,7 +13,10 @@ const SettingsPage = () => {
   return (
     <div className={styles.settingsPage}>
       <div className={styles.permissions_cont}>
-        <div className={styles.notifications}>
+        <Text variant="subHeading">
+          <span className={styles.bolded}>Permissions</span>
+        </Text>
+        <div className={styles.perm}>
           <Text variant="p">Allow Notifications</Text>
 
           <div className={styles.switch}>
@@ -21,7 +24,7 @@ const SettingsPage = () => {
           </div>
         </div>
 
-        <div className={styles.location}>
+        <div className={styles.perm}>
           <Text variant="p">Allow Location Access</Text>
 
           <div className={styles.switch}>
@@ -31,6 +34,9 @@ const SettingsPage = () => {
       </div>
 
       <div className={styles.units_cont}>
+        <Text variant="subHeading">
+          <span className={styles.bolded}>Display Units</span>
+        </Text>
         <div className={styles.temperature}>
           <Text variant="p">Temperature Units</Text>
 
@@ -51,20 +57,16 @@ const SettingsPage = () => {
       </div>
 
       <div className={styles.theme_cont}>
-        <Text variant="heading">Theme</Text>
+        <Text variant="subHeading">
+          <span className={styles.bolded}>Theme</span>
+        </Text>
 
         <div className={styles.toggleCont}>
           <Text variant="p">Activate {themeMode} mode</Text>
 
-          <button
-            type="button"
-            className={styles.switch}
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-            aria-pressed={themeMode === "dark"}
-          >
+          <div className={styles.switch} onClick={toggleTheme}>
             <RecordCircle3 />
-          </button>
+          </div>
         </div>
       </div>
     </div>
